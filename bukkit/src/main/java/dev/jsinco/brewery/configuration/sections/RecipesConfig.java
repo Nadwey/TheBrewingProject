@@ -19,7 +19,7 @@ public class RecipesConfig extends OkaeriConfig {
     @Getter
     public class ConfigurationRecipe extends OkaeriConfig {
         @CustomKey("brew-time")
-        private Duration brewTime;
+        private Integer brewTime;
 
         @CustomKey("brew-difficulty")
         private Integer brewDifficulty = 1;
@@ -57,7 +57,7 @@ public class RecipesConfig extends OkaeriConfig {
         public class Distilling extends OkaeriConfig {
             private Integer runs = 0;
 
-            private Duration time = Duration.ZERO;
+            private Integer time = 0;
         }
 
         private Aging aging = new Aging();

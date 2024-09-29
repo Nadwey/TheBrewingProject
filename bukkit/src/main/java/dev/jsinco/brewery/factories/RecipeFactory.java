@@ -41,13 +41,13 @@ public class RecipeFactory {
 
         return new ReducedRecipe.Builder(recipeName)
                 // TODO: Use duration
-                .brewTime((int) recipe.getBrewTime().toMinutes())
+                .brewTime(recipe.getBrewTime())
                 .brewDifficulty(recipe.getBrewDifficulty())
                 .cauldronType(Util.getEnumByName(CauldronType.class, recipe.getCauldronType()))
                 .ingredients(IngredientManager.getIngredients(recipe.getIngredients()))
                 .color(Util.parseColorString(recipe.getPotionAttributes().getColor()))
                 .distillRuns(recipe.getDistilling().getRuns())
-                .distillTime((int) recipe.getDistilling().getTime().toMinutes())
+                .distillTime(recipe.getDistilling().getTime())
                 .barrelType(Util.getEnumByName(BarrelType.class, recipe.getAging().getBarrelType()))
                 .agingYears(recipe.getAging().getYears())
                 .build();
