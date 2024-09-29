@@ -1,6 +1,7 @@
 package dev.jsinco.brewery.factories;
 
 import dev.jsinco.brewery.TheBrewingProject;
+import dev.jsinco.brewery.configuration.sections.RecipesConfig;
 import dev.jsinco.brewery.enums.BarrelType;
 import dev.jsinco.brewery.enums.CauldronType;
 import dev.jsinco.brewery.enums.PotionQuality;
@@ -9,15 +10,11 @@ import dev.jsinco.brewery.recipes.Recipe;
 import dev.jsinco.brewery.recipes.RecipeEffect;
 import dev.jsinco.brewery.recipes.ReducedRecipe;
 import dev.jsinco.brewery.recipes.ingredient.IngredientManager;
-import dev.jsinco.brewery.util.FileUtil;
 import dev.jsinco.brewery.util.Pair;
 import dev.jsinco.brewery.util.Util;
 import lombok.Getter;
 import org.bukkit.potion.PotionEffectType;
-import org.simpleyaml.configuration.ConfigurationSection;
-import org.simpleyaml.configuration.file.YamlFile;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,23 +24,10 @@ public class RecipeFactory {
 
     @Getter
     private final List<ReducedRecipe> reducedRecipes = new ArrayList<>();
-    private final YamlFile recipesFile;
+    private final RecipesConfig recipesConfig;
 
     public RecipeFactory() {
-        Path mainDir = TheBrewingProject.getInstance().getDataFolder().toPath();
-        FileUtil.extractFile(this.getClass(), "recipes.yml", mainDir, false);
-        this.recipesFile = new YamlFile(mainDir.resolve("recipes.yml").toFile());
-
-        try {
-            this.recipesFile.createOrLoadWithComments();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ConfigurationSection recipes = recipesFile.getConfigurationSection("recipes");
-        for (String recipeName : recipes.getKeys(false)) {
-            this.reducedRecipes.add(this.getReducedRecipe(recipeName));
-        }
+        this.recipesConfig = TheBrewingProject.getInstance().getConfigManager().getRecipes();
     }
 
 
@@ -53,18 +37,19 @@ public class RecipeFactory {
      * @return A ReducedRecipe object with fewer attributes only used for identifying which recipe is being brewed
      */
     public ReducedRecipe getReducedRecipe(String recipeName) {
-        ConfigurationSection recipe = recipesFile.getConfigurationSection("recipes." + recipeName);
+        RecipesConfig.ConfigurationRecipe recipe = recipesConfig.getRecipes().get(recipeName);
 
         return new ReducedRecipe.Builder(recipeName)
-                .brewTime(recipe.getInt("brew-time", 0))
-                .brewDifficulty(recipe.getInt("brew-difficulty", 1))
-                .cauldronType(Util.getEnumByName(CauldronType.class, recipe.getString("cauldron-type", "WATER")))
-                .ingredients(IngredientManager.getIngredients(recipe.getStringList("ingredients")))
-                .color(Util.parseColorString(recipe.getString("potion-attributes.color", "AQUA")))
-                .distillRuns(recipe.getInt("distilling.runs", 0))
-                .distillTime(recipe.getInt("distilling.time", 30))
-                .barrelType(Util.getEnumByName(BarrelType.class, recipe.getString("aging.barrel-type", "ANY")))
-                .agingYears(recipe.getInt("aging.years", 0))
+                // TODO: Use duration
+                .brewTime((int) recipe.getBrewTime().toMinutes())
+                .brewDifficulty(recipe.getBrewDifficulty())
+                .cauldronType(Util.getEnumByName(CauldronType.class, recipe.getCauldronType()))
+                .ingredients(IngredientManager.getIngredients(recipe.getIngredients()))
+                .color(Util.parseColorString(recipe.getPotionAttributes().getColor()))
+                .distillRuns(recipe.getDistilling().getRuns())
+                .distillTime((int) recipe.getDistilling().getTime().toMinutes())
+                .barrelType(Util.getEnumByName(BarrelType.class, recipe.getAging().getBarrelType()))
+                .agingYears(recipe.getAging().getYears())
                 .build();
     }
 
@@ -75,29 +60,9 @@ public class RecipeFactory {
      * @return A Recipe object with all the attributes of the recipe.
      */
     public Recipe getRecipe(String recipeName) {
-        ConfigurationSection recipe = recipesFile.getConfigurationSection("recipes." + recipeName);
+        ReducedRecipe reducedRecipe = getReducedRecipe(recipeName);
 
-        return new Recipe.Builder(recipeName)
-                .brewTime(recipe.getInt("brew-time", 0))
-                .brewDifficulty(recipe.getInt("brew-difficulty", 1))
-                .alcohol(this.parseAlcoholString(recipe.getString("alcohol", "0%")))
-                .cauldronType(Util.getEnumByName(CauldronType.class, recipe.getString("cauldron-type")))
-                .ingredients(IngredientManager.getIngredients(recipe.getStringList("ingredients")))
-                .names(this.getQualityFactoredString(recipe.getString("potion-attributes.name")))
-                .lore(this.getQualityFactoredList(recipe.getStringList("potion-attributes.lore")))
-                .color(Util.parseColorString(recipe.getString("potion-attributes.color")))
-                .glint(recipe.getBoolean("potion-attributes.glint", false))
-                .customModelData(recipe.getInt("potion-attributes.custom-model-data", -1))
-                .distillRuns(recipe.getInt("distilling.runs", 0))
-                .distillTime(recipe.getInt("distilling.time", 30))
-                .barrelType(Util.getEnumByName(BarrelType.class, recipe.getString("aging.barrel-type", "ANY")))
-                .agingYears(recipe.getInt("aging.years", 0))
-                .commands(this.getQualityFactoredList(recipe.getStringList("commands")))
-                .effects(this.getEffectsFromStringList(recipe.getStringList("effects")))
-                .title(recipe.getString("messages.title", null))
-                .message(recipe.getString("messages.message", null))
-                .actionBar(recipe.getString("messages.action-bar", null))
-                .build();
+        return getRecipe(reducedRecipe);
     }
 
     /**
@@ -106,28 +71,28 @@ public class RecipeFactory {
      * @return A Recipe object with all the attributes of the recipe.
      */
     public Recipe getRecipe(ReducedRecipe reducedRecipe) {
-        ConfigurationSection recipe = recipesFile.getConfigurationSection("recipes." + reducedRecipe.getRecipeName());
+        RecipesConfig.ConfigurationRecipe recipe = recipesConfig.getRecipes().get(reducedRecipe.getRecipeName());
 
         return new Recipe.Builder(reducedRecipe.getRecipeName())
                 .brewTime(reducedRecipe.getBrewTime())
                 .brewDifficulty(reducedRecipe.getBrewDifficulty())
-                .alcohol(this.parseAlcoholString(recipe.getString("alcohol", "0%")))
+                .alcohol(recipe.getAlcohol())
                 .cauldronType(reducedRecipe.getCauldronType())
                 .ingredients(reducedRecipe.getIngredients())
-                .names(this.getQualityFactoredString(recipe.getString("potion-attributes.name")))
-                .lore(this.getQualityFactoredList(recipe.getStringList("potion-attributes.lore")))
+                .names(this.getQualityFactoredString(recipe.getPotionAttributes().getName()))
+                .lore(this.getQualityFactoredList(recipe.getPotionAttributes().getLore()))
                 .color(reducedRecipe.getColor())
-                .glint(recipe.getBoolean("potion-attributes.glint", false))
-                .customModelData(recipe.getInt("potion-attributes.custom-model-data", -1))
+                .glint(recipe.getPotionAttributes().getGlint())
+                .customModelData(-1)
                 .distillRuns(reducedRecipe.getDistillRuns())
                 .distillTime(reducedRecipe.getDistillTime())
                 .barrelType(reducedRecipe.getBarrelType())
                 .agingYears(reducedRecipe.getAgingYears())
-                .commands(this.getQualityFactoredList(recipe.getStringList("commands")))
-                .effects(this.getEffectsFromStringList(recipe.getStringList("effects")))
-                .title(recipe.getString("messages.title", null))
-                .message(recipe.getString("messages.message", null))
-                .actionBar(recipe.getString("messages.action-bar", null))
+                .commands(this.getQualityFactoredList(recipe.getCommands()))
+                .effects(this.getEffectsFromStringList(recipe.getEffects()))
+                .title(recipe.getMessages().get("title"))
+                .message(recipe.getMessages().get("chat"))
+                .actionBar(recipe.getMessages().get("action-bar"))
                 .build();
     }
 
@@ -139,28 +104,20 @@ public class RecipeFactory {
      * @return A DefaultRecipe object with all the attributes of the default recipe.
      */
     public DefaultRecipe getDefaultRecipe(String defaultRecipeName) {
-        ConfigurationSection defaultRecipe = recipesFile.getConfigurationSection("default-recipes." + defaultRecipeName);
+        RecipesConfig.ConfigurationDefaultRecipe defaultRecipe = recipesConfig.getDefaultRecipes().get(defaultRecipeName);
 
         return new DefaultRecipe.Builder()
-                .name(defaultRecipe.getString("name", "Cauldron Brew"))
-                .lore(defaultRecipe.getStringList("lore"))
-                .color(Util.parseColorString(defaultRecipe.getString("color", "BLUE")))
-                .customModelData(defaultRecipe.getInt("custom-model-data", -1))
-                .glint(defaultRecipe.getBoolean("glint", false))
+                .name(defaultRecipe.getName())
+                .lore(defaultRecipe.getLore())
+                .color(Util.parseColorString(defaultRecipe.getColor()))
+                .customModelData(-1)
+                .glint(defaultRecipe.getGlint())
                 .build();
     }
 
     public DefaultRecipe getRandomDefaultRecipe() {
-        List<String> defaultRecipes = recipesFile.getConfigurationSection("default-recipes").getKeys(false).stream().toList();
+        List<String> defaultRecipes = recipesConfig.getDefaultRecipes().keySet().stream().toList();
         return this.getDefaultRecipe(Util.getRandomElement(defaultRecipes));
-    }
-
-
-
-    // TODO: This should all be in a utility class
-
-    private int parseAlcoholString(String str) {
-        return Util.getInt(str.replace("%", "").replace(" ", ""));
     }
 
     // FIXME - I feel like there has to be a better way of doing this that doesn't rely on a map of enums?

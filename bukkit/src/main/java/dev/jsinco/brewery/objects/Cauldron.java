@@ -2,7 +2,7 @@ package dev.jsinco.brewery.objects;
 
 import dev.jsinco.brewery.TheBrewingProject;
 import dev.jsinco.brewery.enums.PotionQuality;
-import dev.jsinco.brewery.configuration.Config;
+import dev.jsinco.brewery.configuration.sections.Config;
 import dev.jsinco.brewery.factories.PotionFactory;
 import dev.jsinco.brewery.recipes.ingredient.Ingredient;
 import dev.jsinco.brewery.recipes.ingredient.IngredientManager;
@@ -160,7 +160,7 @@ public class Cauldron extends Tickable {
         block.getWorld().spawnParticle(Particle.SPELL_MOB, particleLoc, 0, particleColor);
 
 
-        if (!Config.MINIMAL_PARTICLES) {
+        if (!TheBrewingProject.getInstance().getConfigManager().getConfig().minimalParticles) {
             return;
         }
 
@@ -223,7 +223,8 @@ public class Cauldron extends Tickable {
 
 
     public boolean isNotOnHeatSource() {
-        if (Config.HEAT_SOURCES.isEmpty()) {
+        List<String> heatSources = TheBrewingProject.getInstance().getConfigManager().getConfig().heatSources;
+        if (heatSources.isEmpty()) {
             return false;
         }
 
@@ -234,7 +235,9 @@ public class Cauldron extends Tickable {
         } else if (below == Material.LAVA || below == Material.WATER) {
             return !BlockUtil.isSource(blockBelow);
         }
-        return !Config.HEAT_SOURCES.contains(below);
+
+        // TODO: The reason that I store heat sources as a string is because, we may want to support blocks from ItemsAdder, Nova, etc.
+        return false;
     }
 
 

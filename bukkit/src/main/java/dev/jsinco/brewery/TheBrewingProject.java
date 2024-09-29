@@ -2,7 +2,7 @@ package dev.jsinco.brewery;
 
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
-import dev.jsinco.brewery.configuration.Config;
+import dev.jsinco.brewery.configuration.ConfigManager;
 import dev.jsinco.brewery.factories.RecipeFactory;
 import dev.jsinco.brewery.listeners.BreweryEvents;
 import dev.jsinco.brewery.objects.Tickable;
@@ -21,6 +21,10 @@ public class TheBrewingProject extends JavaPlugin {
     private static TaskScheduler scheduler;
     @Getter @Setter
     private static RecipeFactory recipeFactory;
+    // I really don't like static variables
+    // And yes, I know that I have to TheBrewingProject.getInstance().getConfigManager().getConfig()
+    @Getter
+    private ConfigManager configManager;
 
     @Override
     public void onLoad() {
@@ -30,11 +34,11 @@ public class TheBrewingProject extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        configManager = new ConfigManager();
         recipeFactory = new RecipeFactory();
         scheduler = UniversalScheduler.getScheduler(this);
         CustomIngredientManager.reloadCustomIngredients();
         this.registerPluginIngredients();
-        Config.reload();
 
 
         this.getServer().getPluginManager().registerEvents(new BreweryEvents(), this);

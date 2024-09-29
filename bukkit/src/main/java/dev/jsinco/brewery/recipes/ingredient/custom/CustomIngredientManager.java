@@ -1,14 +1,14 @@
 package dev.jsinco.brewery.recipes.ingredient.custom;
 
 import dev.jsinco.brewery.TheBrewingProject;
+import dev.jsinco.brewery.configuration.sections.CustomIngredientsConfig;
 import dev.jsinco.brewery.recipes.ingredient.PluginIngredient;
 import dev.jsinco.brewery.util.FileUtil;
 import dev.jsinco.brewery.util.Util;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.simpleyaml.configuration.ConfigurationSection;
-import org.simpleyaml.configuration.file.YamlFile;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,30 +21,18 @@ public class CustomIngredientManager extends PluginIngredient {
 
 
     public static void reloadCustomIngredients() {
-        Path mainDir = TheBrewingProject.getInstance().getDataFolder().toPath();
-        FileUtil.extractFile(TheBrewingProject.class, "custom-ingredients.yml", mainDir, false);
-        YamlFile customIngredientsFile = new YamlFile(mainDir.resolve("custom-ingredients.yml").toFile());
-
-        try {
-            customIngredientsFile.createOrLoadWithComments();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        CustomIngredientsConfig config = TheBrewingProject.getInstance().getConfigManager().getCustomIngredients();
 
         if (!customIngredients.isEmpty()) {
             customIngredients.clear();
         }
 
-        ConfigurationSection customIngredientsSection = customIngredientsFile.getConfigurationSection("custom-ingredients");
-        for (String id : customIngredientsSection.getKeys(false)) {
-            ConfigurationSection ingredientSection = customIngredientsSection.getConfigurationSection(id);
-
-
-            CustomIngredient customIngredient = new CustomIngredient(id,
-                    ingredientSection.getString("name", null),
-                    ingredientSection.getStringList("lore"),
-                    Util.getEnumByName(Material.class, ingredientSection.getString("material", null)),
-                    ingredientSection.getInt("custom-model-data", -1));
+        for (var entry : config.getCustomIngredients().entrySet()) {
+            CustomIngredient customIngredient = new CustomIngredient(entry.getKey(),
+                    entry.getValue().getName(),
+                    entry.getValue().getLore(),
+                    Util.getEnumByName(Material.class, entry.getValue().getMaterial()),
+                    -1);
             customIngredients.add(customIngredient);
         }
     }

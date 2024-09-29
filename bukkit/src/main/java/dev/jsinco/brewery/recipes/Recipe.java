@@ -1,5 +1,6 @@
 package dev.jsinco.brewery.recipes;
 
+import dev.jsinco.brewery.api.config.Percentage;
 import dev.jsinco.brewery.enums.BarrelType;
 import dev.jsinco.brewery.enums.CauldronType;
 import dev.jsinco.brewery.enums.PotionQuality;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Getter
 public class Recipe extends ReducedRecipe {
 
-    private final int alcohol;
+    private final Percentage alcohol;
 
     // Potion attributes
     private final Map<PotionQuality, String> names;
@@ -36,7 +37,7 @@ public class Recipe extends ReducedRecipe {
     private final String actionBar;
 
 
-    public Recipe(String recipeName, int brewTime, int brewDifficulty, int alcohol, CauldronType cauldronType, List<Ingredient> ingredients, Map<PotionQuality, String> names, Map<PotionQuality, List<String>> lore, Color color, boolean glint, int customModelData, int distillRuns, int distillTime, BarrelType barrelType, int agingYears, Map<PotionQuality, List<String>> commands, List<RecipeEffect> effects, String title, String message, String actionBar) {
+    public Recipe(String recipeName, int brewTime, int brewDifficulty, Percentage alcohol, CauldronType cauldronType, List<Ingredient> ingredients, Map<PotionQuality, String> names, Map<PotionQuality, List<String>> lore, Color color, boolean glint, int customModelData, int distillRuns, int distillTime, BarrelType barrelType, int agingYears, Map<PotionQuality, List<String>> commands, List<RecipeEffect> effects, String title, String message, String actionBar) {
         super(recipeName, ingredients, brewTime, color, brewDifficulty, cauldronType, barrelType, agingYears, distillRuns, distillTime);
         this.alcohol = alcohol;
         this.names = names;
@@ -84,7 +85,7 @@ public class Recipe extends ReducedRecipe {
         private int agingYears = 0;
         private int distillRuns = 0;
         private int distillTime = 30;
-        private int alcohol = 0;
+        private Percentage alcohol = new Percentage(0);
         private Map<PotionQuality, String> names = new HashMap<>();
         private Map<PotionQuality, List<String>> lore = new HashMap<>();
         private boolean glint = false;
@@ -144,7 +145,7 @@ public class Recipe extends ReducedRecipe {
             return this;
         }
 
-        public Builder alcohol(int alcohol) {
+        public Builder alcohol(Percentage alcohol) {
             this.alcohol = alcohol;
             return this;
         }

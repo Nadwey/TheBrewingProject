@@ -1,6 +1,6 @@
 package dev.jsinco.brewery.util;
 
-import dev.jsinco.brewery.configuration.Config;
+import dev.jsinco.brewery.TheBrewingProject;
 import org.bukkit.Bukkit;
 
 public final class Logging {
@@ -10,7 +10,7 @@ public final class Logging {
     }
 
     public static void debugLog(String m) {
-        if (Config.VERBOSE_LOGGING) {
+        if (TheBrewingProject.getInstance().getConfigManager().getConfig().verboseLogging) {
             Bukkit.getConsoleSender().sendMessage(m);
         }
     }
