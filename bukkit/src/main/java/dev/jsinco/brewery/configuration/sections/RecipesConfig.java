@@ -12,6 +12,7 @@ import java.util.Map;
 
 @Getter
 @Setter
+@SuppressWarnings({"FieldMayBeFinal", "InnerClassMayBeStatic", "unused"})
 public class RecipesConfig extends OkaeriConfig {
     private Map<String, ConfigurationRecipe> recipes;
 
@@ -80,7 +81,7 @@ public class RecipesConfig extends OkaeriConfig {
 
     @Getter
     public class ConfigurationDefaultRecipe extends OkaeriConfig {
-        private String name = "Caludron Brew";
+        private String name = "Cauldron Brew";
 
         private List<String> lore;
 
