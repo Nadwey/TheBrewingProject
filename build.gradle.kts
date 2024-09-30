@@ -1,37 +1,41 @@
 plugins {
-    id("java")
+    java
 }
 
-group = "dev.jsinco.brewery"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://jitpack.io")
-    maven("https://repo.oraxen.com/releases")
+tasks {
+    jar {
+        enabled = false
+    }
 }
 
-dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
-    compileOnly("org.projectlombok:lombok:1.18.30")
+subprojects {
+    apply(plugin = "java")
+    apply(plugin = "idea")
 
-    //
-    compileOnly("io.th0rgal:oraxen:1.163.0")
+    group = "dev.jsinco.brewery"
+    version = "1.0-SNAPSHOT"
 
-    implementation("com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4")
-    implementation("org.jetbrains:annotations:24.0.0")
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    repositories {
+        mavenCentral()
 
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://jitpack.io")
+        maven("https://repo.oraxen.com/releases")
+        maven("https://storehouse.okaeri.eu/repository/maven-public/")
+        maven("https://repo.oraxen.com/releases")
+        maven("https://repo.clojars.org/")
+    }
+
+    dependencies {
+        implementation("org.jetbrains:annotations:25.0.0")
+
+        compileOnly("org.projectlombok:lombok:1.18.34")
+        annotationProcessor("org.projectlombok:lombok:1.18.34")
+    }
 }
 
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
