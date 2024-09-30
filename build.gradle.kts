@@ -28,6 +28,7 @@ subprojects {
         maven("https://repo.oraxen.com/releases")
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
         maven("https://repo.oraxen.com/releases")
+        maven("https://repo.clojars.org/")
     }
 
     dependencies {

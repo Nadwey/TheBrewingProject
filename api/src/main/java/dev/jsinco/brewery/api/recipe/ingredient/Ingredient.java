@@ -1,4 +1,4 @@
-package dev.jsinco.brewery.recipes.ingredient;
+package dev.jsinco.brewery.api.recipe.ingredient;
 
 import lombok.Getter;
 import lombok.Setter;

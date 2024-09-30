@@ -4,7 +4,7 @@ import dev.jsinco.brewery.api.config.Percentage;
 import dev.jsinco.brewery.enums.BarrelType;
 import dev.jsinco.brewery.enums.CauldronType;
 import dev.jsinco.brewery.enums.PotionQuality;
-import dev.jsinco.brewery.recipes.ingredient.Ingredient;
+import dev.jsinco.brewery.api.recipe.ingredient.Ingredient;
 import lombok.Getter;
 import org.bukkit.Color;
 

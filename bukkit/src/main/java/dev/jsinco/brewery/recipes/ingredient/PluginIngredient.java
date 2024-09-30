@@ -1,5 +1,6 @@
 package dev.jsinco.brewery.recipes.ingredient;
 
+import dev.jsinco.brewery.api.recipe.ingredient.Ingredient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

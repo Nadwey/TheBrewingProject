@@ -8,10 +8,10 @@ dependencies {
     implementation(project(":api"))
 
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
-    compileOnly("io.th0rgal:oraxen:1.173.0")
+    compileOnly("io.th0rgal:oraxen:1.173.0") // newest versions that supports Java 17
 
     implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.5")
-    implementation("com.github.Anon8281:UniversalScheduler:0.1.3")
+    implementation("com.github.puregero:multilib:1.2.4") // Folia & ShreddedPaper support
 }
 
 tasks {
