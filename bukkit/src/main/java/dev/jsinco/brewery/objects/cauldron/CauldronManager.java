@@ -15,7 +15,7 @@ public class CauldronManager {
     private final RegionizedTask asyncTickTask;
 
     public CauldronManager() {
-        // TODO: Support changing the delay here
+        // TODO: Support changing the frequency here
         this.cookTickTask = MultiLib.getGlobalRegionScheduler().runAtFixedRate(TheBrewingProject.getInstance(), (task) -> cookTickAll(), 1L, 20L * 60L);
         this.asyncTickTask = MultiLib.getAsyncScheduler().runAtFixedRate(TheBrewingProject.getInstance(), (task) -> asyncTickAll(), 1L, 1L);
     }
