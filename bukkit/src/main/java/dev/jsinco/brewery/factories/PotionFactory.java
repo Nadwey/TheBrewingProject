@@ -25,8 +25,8 @@ public class PotionFactory {
     private final ReducedRecipe reducedRecipe;
 
     public PotionFactory(BukkitCauldron cauldron) {
-        this.quality = cauldron.getPotionQuality();
-        this.reducedRecipe = cauldron.getClosestRecipe();
+        this.quality = null; // TODO
+        this.reducedRecipe = null;
     }
 
 
