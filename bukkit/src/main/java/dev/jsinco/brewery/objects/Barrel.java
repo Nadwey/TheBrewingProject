@@ -1,24 +1,22 @@
 package dev.jsinco.brewery.objects;
 
+import dev.jsinco.brewery.api.math.BoundingBox;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
 /**
  * Class for traditional barrels which use BoundingBoxes to determine the area of the barrel.
- *
  */
 @Getter
-public class Barrel extends Tickable implements InventoryHolder {
+public class Barrel implements InventoryHolder {
 
     private final UUID objectId;
     private final BoundingBox boundingBox;
@@ -52,25 +50,8 @@ public class Barrel extends Tickable implements InventoryHolder {
         player.closeInventory();
     }
 
-    @Override
-    public void tick() {
-        for (ItemStack item : inventory.getContents()) {
-            // code for aging potions once implemented
-        }
-    }
-
-    @Override
-    public void add() {
-
-    }
-
-    @Override
-    public void remove() {
-
-    }
-
-    @Override
-    public void onEvent(Event e) {
-
-    }
+    // Should we really tick barrels?
+//    @Override
+//    public void tick() {
+//    }
 }

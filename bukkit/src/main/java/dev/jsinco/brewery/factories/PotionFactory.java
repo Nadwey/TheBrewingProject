@@ -2,7 +2,7 @@ package dev.jsinco.brewery.factories;
 
 import dev.jsinco.brewery.TheBrewingProject;
 import dev.jsinco.brewery.enums.PotionQuality;
-import dev.jsinco.brewery.objects.cauldron.Cauldron;
+import dev.jsinco.brewery.objects.cauldron.BukkitCauldron;
 import dev.jsinco.brewery.recipes.DefaultRecipe;
 import dev.jsinco.brewery.recipes.Recipe;
 import dev.jsinco.brewery.recipes.RecipeEffect;
@@ -24,7 +24,7 @@ public class PotionFactory {
     private final PotionQuality quality;
     private final ReducedRecipe reducedRecipe;
 
-    public PotionFactory(Cauldron cauldron) {
+    public PotionFactory(BukkitCauldron cauldron) {
         this.quality = cauldron.getPotionQuality();
         this.reducedRecipe = cauldron.getClosestRecipe();
     }

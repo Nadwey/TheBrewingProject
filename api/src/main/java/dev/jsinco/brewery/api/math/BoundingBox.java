@@ -1,4 +1,4 @@
-package dev.jsinco.brewery.objects;
+package dev.jsinco.brewery.api.math;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -39,19 +39,20 @@ public class BoundingBox {
         }
         return bL;
     }
-
-
+    
     public boolean contains(int x, int y, int z) {
         return (x >= xMin && x <= xMax) && (y >= yMin && y <= yMax) && (z >= zMin && z <= zMax);
     }
 
+    public boolean contains(BlockPos blockPos) {
+        return contains(blockPos.getX(), blockPos.getY(), blockPos.getZ()) && blockPos.getWorld().equals(world);
+    }
+
     public boolean contains(Location loc) {
-        return contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) && loc.getWorld().equals(world);
+        return contains(new BlockPos(loc));
     }
 
     public boolean contains(Block block) {
-        return contains(block.getX(), block.getY(), block.getZ()) && block.getWorld().equals(world);
+        return contains(new BlockPos(block));
     }
-
-
 }

@@ -1,4 +1,4 @@
-package dev.jsinco.brewery.api.object;
+package dev.jsinco.brewery.api.object.cauldron;
 
 import dev.jsinco.brewery.api.recipe.ingredient.Ingredient;
 import lombok.Getter;
@@ -14,19 +14,34 @@ import java.util.UUID;
 @Getter
 public class CauldronData {
     private final UUID uid;
-    private final List<Ingredient> ingredients;
-    private final LocalDateTime brewStarted;
     private final ICauldron cauldron;
+    private List<Ingredient> ingredients;
+
+    /**
+     * Cook time in minutes
+     */
+    private float cookTime;
 
     public CauldronData(ICauldron cauldron) {
         this.uid = UUID.randomUUID();
-        this.ingredients = new ArrayList<>();
-        this.brewStarted = LocalDateTime.now();
         this.cauldron = cauldron;
+
+        restartCooking();
+    }
+
+    public void restartCooking() {
+        this.ingredients = new ArrayList<>();
+        this.cookTime = 0;
+    }
+
+    public void increaseCookTime() {
+        this.cookTime++;
     }
 
     public void addIngredient(Ingredient ingredient) {
-        // add ingredient
-
+        this.ingredients.add(ingredient);
     }
+
+
+
 }
