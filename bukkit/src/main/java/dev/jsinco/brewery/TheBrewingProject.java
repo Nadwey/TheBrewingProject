@@ -44,6 +44,11 @@ public class TheBrewingProject extends JavaPlugin {
 
     }
 
+    @Override
+    public void onDisable() {
+        cauldronManager.disable();
+    }
+
     public void registerPluginIngredients() {
         PluginIngredient.registerPluginIngredient("Custom", CustomIngredientManager::new, false);
         PluginIngredient.registerPluginIngredient("Oraxen", OraxenPluginIngredient::new, true);
