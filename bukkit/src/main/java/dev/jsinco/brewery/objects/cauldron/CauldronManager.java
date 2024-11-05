@@ -4,7 +4,7 @@ import com.github.puregero.multilib.MultiLib;
 import com.github.puregero.multilib.regionized.RegionizedTask;
 import dev.jsinco.brewery.TheBrewingProject;
 import dev.jsinco.brewery.api.math.BlockPos;
-import dev.jsinco.brewery.api.object.cauldron.ICauldron;
+import dev.jsinco.brewery.api.object.cauldron.Cauldron;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +48,13 @@ public class CauldronManager {
     }
 
     public void cookTickAll() {
-        for (ICauldron cauldron : cauldrons) {
+        for (Cauldron cauldron : cauldrons) {
             cauldron.handleCookTick();
         }
     }
 
     public void asyncTickAll() {
-        for (ICauldron cauldron : cauldrons) {
+        for (Cauldron cauldron : cauldrons) {
             cauldron.handleAsyncTick();
         }
     }

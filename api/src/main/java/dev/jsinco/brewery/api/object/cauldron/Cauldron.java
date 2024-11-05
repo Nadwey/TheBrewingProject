@@ -12,9 +12,8 @@ import java.util.UUID;
  * Class that contains all the necessary data for a basic cauldron implementation
  */
 @Getter
-public class CauldronData {
+public abstract class Cauldron {
     private final UUID uid;
-    private final ICauldron cauldron;
     private List<Ingredient> ingredients;
 
     /**
@@ -22,9 +21,8 @@ public class CauldronData {
      */
     private float cookTime;
 
-    public CauldronData(ICauldron cauldron) {
+    public Cauldron() {
         this.uid = UUID.randomUUID();
-        this.cauldron = cauldron;
 
         restartCooking();
     }
@@ -42,6 +40,14 @@ public class CauldronData {
         this.ingredients.add(ingredient);
     }
 
+    /**
+     * Fired every minute
+     */
+    public abstract void handleCookTick();
 
+    /**
+     * Fired every tick asynchronously
+     */
+    public abstract void handleAsyncTick();
 
 }

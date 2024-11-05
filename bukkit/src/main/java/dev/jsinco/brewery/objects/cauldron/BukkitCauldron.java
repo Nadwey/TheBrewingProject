@@ -1,22 +1,20 @@
 package dev.jsinco.brewery.objects.cauldron;
 
 import dev.jsinco.brewery.api.math.BlockPos;
-import dev.jsinco.brewery.api.object.cauldron.CauldronData;
-import dev.jsinco.brewery.api.object.cauldron.ICauldron;
+import dev.jsinco.brewery.api.object.cauldron.Cauldron;
 import lombok.Getter;
 import java.util.Random;
 
 @Getter
-public class BukkitCauldron implements ICauldron {
+public class BukkitCauldron extends Cauldron {
     private static final Random RANDOM = new Random();
 
     private final BlockPos position;
-    private final CauldronData cauldronData;
 
     public BukkitCauldron(BlockPos position) {
+        super();
+        
         this.position = position;
-
-        cauldronData = new CauldronData(this);
     }
 
     @Override
@@ -24,13 +22,13 @@ public class BukkitCauldron implements ICauldron {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         BukkitCauldron cauldron = (BukkitCauldron) obj;
-        return cauldronData.getUid().equals(cauldron.cauldronData.getUid());
+        return getUid().equals(cauldron.getUid());
     }
 
     @Override
     public void handleCookTick() {
         // if (theBlockBelowIsAHeatingSource(currentRecipe))
-        this.cauldronData.increaseCookTime();
+        this.increaseCookTime();
     }
 
     @Override
