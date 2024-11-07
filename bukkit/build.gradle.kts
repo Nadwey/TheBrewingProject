@@ -2,6 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id("com.gradleup.shadow") version "8.3.2"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 dependencies {
@@ -43,5 +44,10 @@ tasks {
 
     jar {
         enabled = false
+    }
+
+
+    runServer {
+        minecraftVersion("1.21.3")
     }
 }

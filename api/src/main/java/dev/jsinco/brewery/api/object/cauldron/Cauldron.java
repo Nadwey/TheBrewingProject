@@ -1,7 +1,9 @@
 package dev.jsinco.brewery.api.object.cauldron;
 
+import dev.jsinco.brewery.api.recipe.BrewResult;
 import dev.jsinco.brewery.api.recipe.ingredient.Ingredient;
 import lombok.Getter;
+import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,4 +52,10 @@ public abstract class Cauldron {
      */
     public abstract void handleAsyncTick();
 
+    /**
+     * Get the brew result, without actually doing anything
+     *
+     * @return The brew result
+     */
+    public abstract BrewResult getBrewResult();
 }

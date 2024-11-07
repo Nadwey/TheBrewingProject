@@ -28,7 +28,40 @@ public class BlockPos {
         this.z = block.getZ();
     }
 
+    public BlockPos add(BlockPos blockPos) {
+        return new BlockPos(blockPos.world, x + blockPos.x, y + blockPos.y, z + blockPos.z);
+    }
+
+    public BlockPos add(int x, int y, int z) {
+        return new BlockPos(world, this.x + x, this.y + y, this.z + z);
+    }
+
+    public BlockPos subtract(BlockPos blockPos) {
+        return blockPos.add(blockPos.negate());
+    }
+
+    public BlockPos subtract(int x, int y, int z) {
+        return new BlockPos(world, this.x - x, this.y - y, this.z - z);
+    }
+
+    public BlockPos negate() {
+        return new BlockPos(world, -x, -y, -z);
+    }
+
     public Location getLocation() {
-        return new Location(world, x, y, z);
+        return new Location(world, x + 0.5, y + 0.5, z + 0.5);
+    }
+
+    public static BlockPos fromLocation(Location location) {
+        return new BlockPos(location);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BlockPos pos = (BlockPos) o;
+        return world.equals(pos.world) && x == pos.x && y == pos.y && z == pos.z;
     }
 }

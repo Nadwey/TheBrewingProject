@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Percentage {
-    private final static Pattern PERCENTAGE_PATTERN = Pattern.compile("(\\d+(\\.\\d+)?)%");
+    private final static Pattern PERCENTAGE_PATTERN = Pattern.compile("^(\\d+(\\.\\d+)?(E-?\\d+)?)%$");
 
     @Getter
     private final float value;
@@ -41,13 +41,13 @@ public class Percentage {
      * Constructs a new Percentage object from a string representation of a percentage.
      *
      * @param percentage  a string representing the percentage value.<br />
-     *                    The string needs to match the following format: (\d+(\.\d+)?)%
+     *                    The string needs to match the following format: ^(\d+(\.\d+)?(E-?\d+)?)%$
      */
     public Percentage(String percentage) {
         Matcher matcher = PERCENTAGE_PATTERN.matcher(percentage);
 
         if (matcher.matches()) {
-            this.value = Float.parseFloat(matcher.group(1));
+            this.value = Float.parseFloat(matcher.group(1)) / 100.0f;
             return;
         }
 
