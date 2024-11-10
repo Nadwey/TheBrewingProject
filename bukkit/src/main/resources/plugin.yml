@@ -1,5 +1,5 @@
 name: TheBrewingProject
-main: dev.jsinco.bukkit.TheBrewingProject
+main: dev.jsinco.brewery.bukkit.TheBrewingProject
 description: 'Help me.'
 authors: [Jsinco, Mitality, Nadwey]
 version: '${version}'
