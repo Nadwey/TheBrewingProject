@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ListIterator;
 
@@ -40,6 +41,17 @@ public class BreweryEvents implements Listener {
         }
     }
 
+    private void handleCauldronInteract(Block block, ItemStack item, PlayerInteractEvent event) {
+        Levelled levelled = (Levelled) block.getBlockData();
+        if (levelled.getLevel() == 0) return;
+
+        BukkitCauldron cauldron = (BukkitCauldron) TheBrewingProject.getInstance().getCauldronManager().ensureAndGetCauldron(BlockPos.fromLocation(block.getLocation()));
+
+        cauldron.addIngredient(IngredientManager.getIngredient(item));
+        item.setAmount(item.getAmount() - 1);
+        event.setCancelled(true);
+    }
+
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
@@ -47,14 +59,7 @@ public class BreweryEvents implements Listener {
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block != null) {
             if (Util.isCauldron(block.getType()) && item != null) {
-                Levelled levelled = (Levelled) block.getBlockData();
-                if (levelled.getLevel() == 0) return;
-
-                BukkitCauldron cauldron = (BukkitCauldron) TheBrewingProject.getInstance().getCauldronManager().ensureAndGetCauldron(BlockPos.fromLocation(block.getLocation()));
-
-                cauldron.addIngredient(IngredientManager.getIngredient(item));
-                item.setAmount(item.getAmount() - 1);
-                event.setCancelled(true);
+                handleCauldronInteract(block, item, event);
             }
         }
     }

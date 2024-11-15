@@ -1,10 +1,12 @@
+Note from Nadwey:  
+Much of the code in this branch is either incomplete or to be rewritten, so please approach it with caution.
+
 # TheBrewingProject
 A complete rewrite of BreweryX to add new features and expand upon the plugin.
 
 ### Announcement from TheBrewingProject [discord](https://discord.gg/QsDKaruwcC):
 
 # If you are a Java and/or Kotlin developer, please read
-
 
 I'm looking to assemble a team of developers to rewrite Brewery. While I still plan to maintain BreweryX unless this plan comes to fruition, Brewery is an extremely old plugin with it being over a decade old now. 'DieReicheEtherons', the group consisting of **TTTheKing, Grafe, and Sn0wStorm**, have made poor code choices over the years which now hurts this project and especially me as a solo developer maintaining BreweryX. The old developers of this plugin are long gone, and while I have gotten familiar with this projects code, it's incredibly bad overall and spending hours cleaning up messes left behind by the original developers has been frustrating at times.
 

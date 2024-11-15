@@ -38,7 +38,6 @@ tasks {
     shadowJar {
         val pack = "dev.jsinco.brewery.bukkit.libs"
 
-        // TODO: relocate things
         relocate("com.github.puregero.multilib", "${pack}.multilib")
         relocate("eu.okaeri.configs", "${pack}.okaericonfigs")
         relocate("org.yaml.snakeyaml", "${pack}.snakeyaml")

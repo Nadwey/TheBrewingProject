@@ -14,7 +14,7 @@ import java.util.UUID;
  * Class that contains all the necessary data for a basic cauldron implementation
  */
 @Getter
-public abstract class Cauldron {
+public abstract class Cauldron implements ICauldron {
     private final UUID uid;
     private List<Ingredient> ingredients;
 
